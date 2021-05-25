@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from .models import Plug
 
-# Create your views here.
+# Create your views here
 
 @csrf_exempt
 def index(request):
@@ -13,6 +14,8 @@ def index(request):
     phone_number = request.POST.get("phoneNumber", None)
     text = request.POST.get("text")
 
+    squad= Plug.objects.all
+    
     response = ""
     #First request
     if text == "":
@@ -21,7 +24,7 @@ def index(request):
       response += "2.Peter \n"
 
     elif text == "1":
-      response = "CON Choose the product you would like from vannie \n"
+      response = "CON Choose the product you would like from" +{{squad.first_name}}+ "\n"
       response += "1. Prod1 \n"
       response += "2. Prod2 \n"
 
@@ -51,9 +54,9 @@ def index(request):
       response += "1. Number of products \n"
       response += "2. Go back \n"
     
-
-    return HttpResponse(response)
+    return render(response, {'squad': squad})
 
 def detail(request):
-    return HttpResponse("You're looking at question ." )
+    squad = Plug.objects.all
+    return render(request,'base.html',{'squad':squad} )
     
